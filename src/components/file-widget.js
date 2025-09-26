@@ -3,10 +3,42 @@
  * Handles file input, drag & drop, and file processing
  */
 
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, { useRef, useCallback, useState, useMemo } from 'react';
+
+const DEFAULT_ACCEPTED_TYPES = [
+    '.mid',
+    '.midi',
+    '.MID',
+    '.MIDI',
+    'audio/midi',
+    'audio/x-midi',
+    'audio/mid',
+    'application/x-midi',
+    'application/octet-stream'
+];
+
+const normalizeAcceptList = (acceptList = []) => {
+    return acceptList
+        .map(entry => (typeof entry === 'string' ? entry.trim() : ''))
+        .filter(Boolean);
+};
+
+const buildAcceptAttribute = (acceptList = []) => {
+    // Deduplicate while preserving order
+    const seen = new Set();
+    const deduped = [];
+    acceptList.forEach(value => {
+        const key = value.toLowerCase();
+        if (!seen.has(key)) {
+            seen.add(key);
+            deduped.push(value);
+        }
+    });
+    return deduped.join(',');
+};
 
 export const FileWidget = ({ 
-    acceptedTypes = ['.mid', '.midi', '.MID', '.MIDI'],
+    acceptedTypes = DEFAULT_ACCEPTED_TYPES,
     maxFileSize = 10 * 1024 * 1024, // 10MB
     multiple = false,
     dragAndDrop = true,
@@ -20,6 +52,9 @@ export const FileWidget = ({
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
 
+    const normalizedAccepted = useMemo(() => normalizeAcceptList(acceptedTypes), [acceptedTypes]);
+    const acceptAttribute = useMemo(() => buildAcceptAttribute(normalizedAccepted), [normalizedAccepted]);
+
     const validateFile = useCallback((file) => {
         // Check file size
         if (file.size > maxFileSize) {
@@ -29,13 +64,18 @@ export const FileWidget = ({
 
         // Check file type
         const extension = '.' + file.name.split('.').pop().toLowerCase();
-        if (!acceptedTypes.some(type => type.toLowerCase() === extension)) {
+        const mimeType = (file.type || '').toLowerCase();
+
+        const isExtensionAllowed = normalizedAccepted.some(type => type.startsWith('.') && type.toLowerCase() === extension);
+        const isMimeAllowed = normalizedAccepted.some(type => !type.startsWith('.') && type.toLowerCase() === mimeType);
+
+        if (!isExtensionAllowed && !isMimeAllowed) {
             onError(`Invalid file type: ${file.name}`);
             return false;
         }
 
         return true;
-    }, [acceptedTypes, maxFileSize, onError]);
+    }, [normalizedAccepted, maxFileSize, onError]);
 
     const loadFile = useCallback((file) => {
         const reader = new FileReader();
@@ -143,7 +183,7 @@ export const FileWidget = ({
             <input
                 ref={fileInputRef}
                 type="file"
-                accept={acceptedTypes.join(',')}
+                accept={acceptAttribute}
                 multiple={multiple}
                 onChange={handleFileSelect}
                 style={{ display: 'none' }}
