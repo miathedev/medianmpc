@@ -221,6 +221,9 @@ export class MidiConverterApp extends Component {
                     <p className="app-credit" style={{ fontSize: '0.95em', color: '#888', marginTop: '10px' }}>
                         Based on the original by <a href="https://www.fentonia.com/catnip/midianmpc/index.html" target="_blank" rel="noopener noreferrer">Catnip/Jamie Faye Fenton (Fentonia)</a>.
                     </p>
+                    <p className="app-source" style={{ fontSize: '0.95em', marginTop: '6px' }}>
+                        View this project on <a href="https://github.com/miathedev/medianmpc" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                    </p>
                 </div>
 
                 <div className="file-section">
