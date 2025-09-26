@@ -93,7 +93,8 @@ export class MidiPlayer extends React.Component {
     }, trackDuration * 1000 + 500);
   };
 
-  stopTrack = (keepState = false) => {
+  stopTrack = (keepStateOrEvent = false) => {
+    const keepState = keepStateOrEvent === true;
     Tone.Transport.stop();
     Tone.Transport.cancel();
     Tone.Transport.position = 0;
