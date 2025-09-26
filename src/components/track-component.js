@@ -307,6 +307,12 @@ export class MidiHeader extends Component {
                         <span className="label">Time Division:</span>
                         <span className="value">{header.ticksPerQuarter || header.timeDivision || 480} ticks per quarter note</span>
                     </div>
+                    {header.tempoBPM && (
+                        <div className="header-row">
+                            <span className="label">Tempo:</span>
+                            <span className="value">{header.tempoBPM.toFixed ? header.tempoBPM.toFixed(2) : header.tempoBPM} BPM</span>
+                        </div>
+                    )}
                     {text && (
                         <div className="header-row">
                             <span className="label">File:</span>

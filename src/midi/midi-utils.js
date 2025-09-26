@@ -283,8 +283,9 @@ export class MidiDocument {
     constructor(midiData) {
         this.header = midiData.header || {};
         this.tracks = (midiData.tracks || []).map(track => new MidiTrack(track));
-        this.ticksPerQuarter = this.header.ticksPerQuarter || 480;
+        this.ticksPerQuarter = this.header.ticksPerQuarter || this.header.timeDivision || 480;
         this.timeDivision = this.header.timeDivision;
+        this.tempoBPM = this.header.tempoBPM || 120;
     }
 
     // Parse MIDI from binary data
@@ -299,8 +300,11 @@ export class MidiDocument {
         const parsedMidi = MidiParser.parse(uint8Array);
         console.log('Parsed MIDI data:', parsedMidi);
         
+    let tempoBPM = null;
+    let firstTempoTicks = null;
+
         // Convert to our format
-        const tracks = parsedMidi.track.map(trackData => {
+        const tracks = parsedMidi.track.map((trackData, trackIndex) => {
             const notes = [];
             const events = trackData.event;
             let currentTime = 0;
@@ -316,6 +320,9 @@ export class MidiDocument {
 
             // First pass to capture static metadata
             events.forEach(event => {
+                const delta = event.deltaTime || 0;
+                currentTime += delta;
+
                 if (event.type === 255 && event.metaType === 3) { // Track name
                     const decodedName = decodeMetaText(event.data);
                     const sanitized = sanitizeMetaText(decodedName);
@@ -328,9 +335,21 @@ export class MidiDocument {
                     if (sanitizedInstrument) {
                         instrumentName = sanitizedInstrument;
                     }
+                } else if (event.type === 255 && event.metaType === 81 && Array.isArray(event.data) && event.data.length === 3) { // Tempo
+                    if (tempoBPM === null || firstTempoTicks === null || currentTime < firstTempoTicks) {
+                        const microsPerQuarter = (event.data[0] << 16) | (event.data[1] << 8) | event.data[2];
+                        if (microsPerQuarter > 0) {
+                            const bpm = 60000000 / microsPerQuarter;
+                            if (!Number.isNaN(bpm) && bpm > 0) {
+                                tempoBPM = bpm;
+                                firstTempoTicks = currentTime;
+                            }
+                        }
+                    }
                 }
             });
 
+            currentTime = 0;
             events.forEach(event => {
                 currentTime += event.deltaTime;
                 const channel = typeof event.channel === 'number' ? event.channel : 0;
@@ -446,7 +465,8 @@ export class MidiDocument {
                 format: parsedMidi.formatType,
                 trackCount: parsedMidi.tracks,
                 ticksPerQuarter: parsedMidi.timeDivision,
-                timeDivision: parsedMidi.timeDivision
+                timeDivision: parsedMidi.timeDivision,
+                tempoBPM: tempoBPM || 120
             },
             tracks: tracks
         };

@@ -55,6 +55,28 @@ export class MidiConverterApp extends Component {
             const toneMidi = new Midi(data);
             console.log('Parsed Tone.js MIDI object:', toneMidi);
 
+            // Prefer Tone.js tempo parsing if available (handles multiple tempo changes accurately)
+            let detectedTempo = midiDocument?.header?.tempoBPM || null;
+            if (toneMidi?.header) {
+                if (Array.isArray(toneMidi.header.tempos) && toneMidi.header.tempos.length > 0) {
+                    const earliestTempo = [...toneMidi.header.tempos].sort((a, b) => (a.ticks || 0) - (b.ticks || 0))[0];
+                    if (earliestTempo?.bpm) {
+                        detectedTempo = earliestTempo.bpm;
+                    }
+                } else if (toneMidi.header.bpm) {
+                    detectedTempo = toneMidi.header.bpm;
+                }
+            }
+
+            if (detectedTempo) {
+                const tempoBPM = Number.parseFloat(detectedTempo) || 120;
+                midiDocument.header = {
+                    ...midiDocument.header,
+                    tempoBPM
+                };
+                midiDocument.tempoBPM = tempoBPM;
+            }
+
             // Log track details
             midiDocument.tracks.forEach((track, index) => {
                 console.log(`Track ${index + 1}: ${track.notes?.length || 0} notes, name: "${track.name || 'Unknown'}"`);
