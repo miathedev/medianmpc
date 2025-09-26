@@ -173,6 +173,37 @@ export class TrackComponent extends Component {
         return cleaned.replace(/\b\w/g, (char) => char.toUpperCase());
     };
 
+    const sanitizeName = (value) => {
+        if (!value || typeof value !== 'string') {
+            return '';
+        }
+        const cleaned = value
+            .replace(/[\u0000-\u001F\u007F]/g, ' ')
+            .replace(/[_]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+        if (!cleaned) {
+            return '';
+        }
+        return cleaned;
+    };
+
+    const formatTrackDisplayName = () => {
+        const primary = sanitizeName(track.name);
+        if (primary) {
+            return primary;
+        }
+
+        const toneName = sanitizeName(toneTrack && toneTrack.name);
+        if (toneName) {
+            return toneName;
+        }
+
+        return '';
+    };
+
+    const displayTrackName = formatTrackDisplayName();
+
     const toneInstrumentName = toneInstrument
         ? formatInstrumentString(toneInstrument.name || toneInstrument.family)
         : '';
@@ -196,8 +227,8 @@ export class TrackComponent extends Component {
                 <div className="track-header">
                     <h3>
                         Track {trackNum}
-                        {track.name && (
-                            <span className="track-name">: {track.name}</span>
+                        {displayTrackName && (
+                            <span className="track-name">: {displayTrackName}</span>
                         )}
                     </h3>
                     
