@@ -1,3 +1,35 @@
+/* MIDI Player Button Styles */
+.midi-play-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+.midi-play-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+.midi-play-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.midi-stop-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+.midi-stop-btn:hover:not(:disabled) {
+    background-color: #c82333;
+}
+.midi-stop-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
 /* File Widget Styles */
 .file-widget {
     margin-bottom: 20px;

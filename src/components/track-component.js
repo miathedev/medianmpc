@@ -6,6 +6,7 @@
 import React, { Component } from 'react';
 import { MidiVisualizer } from './midi-visualizer.js';
 import { MPCConverter } from '../converter/mpc-converter.js';
+import { MidiPlayer } from './midi-player.js';
 
 export class TrackComponent extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ export class TrackComponent extends Component {
     };
 
     handleConvertToMPC = () => {
-        const { track, trackNum, converter, song } = this.props;
+    const { track, trackNum, converter, song, midiArrayBuffer } = this.props;
         const { selectedRange } = this.state;
         
         if (!track || !converter) {
@@ -158,10 +159,11 @@ export class TrackComponent extends Component {
             );
         }
 
-        const stats = this.getTrackStats();
-        const hasSelection = selectedRange.start !== selectedRange.end;
-        
-        console.log(`Track ${trackNum} stats:`, stats);
+    const stats = this.getTrackStats();
+    const hasSelection = selectedRange.start !== selectedRange.end;
+    // Fix: get midiArrayBuffer from props
+    const { midiArrayBuffer } = this.props;
+    console.log(`Track ${trackNum} stats:`, stats);
 
         return (
             <div className="track-component">
@@ -221,7 +223,7 @@ export class TrackComponent extends Component {
                                 >
                                     {isConverting ? 'Converting...' : '+ MPC Pattern'}
                                 </button>
-                                
+                                <MidiPlayer midiArrayBuffer={midiArrayBuffer} trackIndex={trackNum - 1} />
                                 {hasSelection && (
                                     <button
                                         className="clear-selection-button"

@@ -62,6 +62,7 @@ export class MidiConverterApp extends Component {
                 midiDocument,
                 midiText: name,
                 converter,
+                midiArrayBuffer: data,
                 isLoading: false,
                 error: null
             });
@@ -100,7 +101,7 @@ export class MidiConverterApp extends Component {
     };
 
     renderTrackList = () => {
-        const { midiDocument, converter } = this.state;
+    const { midiDocument, converter, midiArrayBuffer } = this.state;
 
         if (!midiDocument || !midiDocument.tracks) {
             return null;
@@ -120,6 +121,7 @@ export class MidiConverterApp extends Component {
                         trackNum={index + 1}
                         song={midiDocument}
                         converter={converter}
+                        midiArrayBuffer={midiArrayBuffer}
                     />
                 ))}
             </div>
