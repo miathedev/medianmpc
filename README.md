@@ -1,6 +1,6 @@
 # MIDI to MPC Pattern Converter
 
-A web-based application that converts MIDI files to MPC pattern format (.mpcpattern) for Akai Force and other Akai products. This project has been unminified and restructured from the original at [https://www.fentonia.com/catnip/midianmpc/index.html](https://www.fentonia.com/catnip/midianmpc/index.html) into a modular, maintainable codebase.
+A web-based application that converts MIDI files to MPC pattern format (.mpcpattern) for Akai Force and other Akai products. This project has been unminified and restructured from the original by [Catnip/Jamie Faye Fenton (Fentonia)](https://www.fentonia.com/catnip/midianmpc/index.html) into a modular, maintainable codebase.
 
 ## Features
 
@@ -142,4 +142,4 @@ To contribute to this project:
 
 ## License
 
-The original project doesnt have a specified license. But the original credit goes to Jamie Fenton aka [Fentonia](https://www.fentonia.com) for the initial implementation. This restructured version is provided as-is without any warranty.
+The original project doesn't have a specified license. Original credit goes to [Catnip/Jamie Faye Fenton (Fentonia)](https://www.fentonia.com/catnip/midianmpc/index.html) for the initial implementation. This restructured version is provided as-is without any warranty.

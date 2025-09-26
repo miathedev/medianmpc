@@ -165,6 +165,9 @@ export class MidiConverterApp extends Component {
                         Select a MIDI file, choose the tracks and time ranges you want to convert,
                         and download the resulting MPC pattern files.
                     </p>
+                    <p className="app-credit" style={{ fontSize: '0.95em', color: '#888', marginTop: '10px' }}>
+                        Based on the original by <a href="https://www.fentonia.com/catnip/midianmpc/index.html" target="_blank" rel="noopener noreferrer">Catnip/Jamie Faye Fenton (Fentonia)</a>.
+                    </p>
                 </div>
 
                 <div className="file-section">
