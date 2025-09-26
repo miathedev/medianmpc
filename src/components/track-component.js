@@ -223,7 +223,7 @@ export class TrackComponent extends Component {
                                 >
                                     {isConverting ? 'Converting...' : '+ MPC Pattern'}
                                 </button>
-                                <MidiPlayer midiArrayBuffer={midiArrayBuffer} trackIndex={trackNum - 1} />
+                                <MidiPlayer midiArrayBuffer={midiArrayBuffer} trackIndex={this.props.midiTrackIndex} />
                                 {hasSelection && (
                                     <button
                                         className="clear-selection-button"

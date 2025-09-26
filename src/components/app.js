@@ -103,30 +103,36 @@ export class MidiConverterApp extends Component {
     renderTrackList = () => {
     const { midiDocument, converter, midiArrayBuffer } = this.state;
 
-        if (!midiDocument || !midiDocument.tracks) {
-            return null;
-        }
+    if (!midiDocument || !midiDocument.tracks) {
+        return null;
+    }
 
-        // Calculate time bounds
-        if (converter) {
-            converter.calcTimeBounds();
-        }
+    // Calculate time bounds
+    if (converter) {
+        converter.calcTimeBounds();
+    }
 
-        return (
-            <div className="track-list">
-                {midiDocument.tracks.map((track, index) => (
-                    <TrackComponent
-                        key={`track-${index}`}
-                        track={track}
-                        trackNum={index + 1}
-                        song={midiDocument}
-                        converter={converter}
-                        midiArrayBuffer={midiArrayBuffer}
-                    />
-                ))}
-            </div>
-        );
-    };
+    // Only show tracks with notes, but keep their original MIDI file index
+    const tracksWithNotes = midiDocument.tracks
+        .map((track, midiTrackIndex) => ({ track, midiTrackIndex }))
+        .filter(({ track }) => track.notes && track.notes.length > 0);
+
+    return (
+        <div className="track-list">
+            {tracksWithNotes.map(({ track, midiTrackIndex }, uiIndex) => (
+                <TrackComponent
+                    key={`track-${midiTrackIndex}`}
+                    track={track}
+                    trackNum={uiIndex + 1}
+                    midiTrackIndex={midiTrackIndex}
+                    song={midiDocument}
+                    converter={converter}
+                    midiArrayBuffer={midiArrayBuffer}
+                />
+            ))}
+        </div>
+    );
+};
 
     renderStats = () => {
         const { midiDocument } = this.state;
