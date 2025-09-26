@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import { MidiVisualizer } from './midi-visualizer.js';
 import { MPCConverter } from '../converter/mpc-converter.js';
 import { MidiPlayer } from './midi-player.js';
+import { getGeneralMidiInstrumentName } from '../midi/midi-utils.js';
 
 export class TrackComponent extends Component {
     constructor(props) {
@@ -163,6 +164,31 @@ export class TrackComponent extends Component {
     const hasSelection = selectedRange.start !== selectedRange.end;
     // Fix: get midiArrayBuffer from props
     const { midiArrayBuffer } = this.props;
+
+    const toneInstrument = toneTrack && toneTrack.instrument ? toneTrack.instrument : null;
+    const formatInstrumentString = (value) => {
+        if (!value || typeof value !== 'string') return '';
+        const cleaned = value.replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!cleaned) return '';
+        return cleaned.replace(/\b\w/g, (char) => char.toUpperCase());
+    };
+
+    const toneInstrumentName = toneInstrument
+        ? formatInstrumentString(toneInstrument.name || toneInstrument.family)
+        : '';
+
+    const programNumber = typeof track.instrument === 'number'
+        ? track.instrument
+        : (toneInstrument && typeof toneInstrument.number === 'number' ? toneInstrument.number : null);
+
+    const programInstrumentName = typeof programNumber === 'number'
+        ? getGeneralMidiInstrumentName(programNumber)
+        : '';
+
+    const instrumentLabel = track.instrumentName
+        || toneInstrumentName
+        || programInstrumentName
+        || '';
     console.log(`Track ${trackNum} stats:`, stats);
 
         return (
@@ -188,6 +214,9 @@ export class TrackComponent extends Component {
                                     </span>
                                     {track.channel !== undefined && (
                                         <span className="stat">Channel: {track.channel + 1}</span>
+                                    )}
+                                    {instrumentLabel && (
+                                        <span className="stat">Instrument: {instrumentLabel}</span>
                                     )}
                                 </>
                             )}
