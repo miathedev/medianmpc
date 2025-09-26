@@ -2,15 +2,16 @@
   "name": "midi-mpc-converter",
   "version": "1.0.0",
   "description": "Convert MIDI files to MPC pattern format for Akai Force and other Akai products",
+  "homepage": "https://miathedev.github.io/medianmpc/",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
     "dev": "webpack serve --mode development",
-    "test": "jest",
-    "lint": "eslint src/**/*.js",
-    "format": "prettier --write src/**/*.js"
+  "test": "jest",
+  "lint": "eslint src/**/*.js",
+  "format": "prettier --write src/**/*.js"
   },
   "keywords": [
     "midi",

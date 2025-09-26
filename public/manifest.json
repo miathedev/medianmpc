@@ -1,0 +1,15 @@
+{
+  "name": "MIDI to MPC Pattern Converter",
+  "short_name": "MPC Converter",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "Convert MIDI files to MPC pattern format for Akai Force and other Akai products.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

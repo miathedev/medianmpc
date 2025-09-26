@@ -12,7 +12,7 @@ export default (env, argv) => {
     entry: './src/main.js',
     output: {
       filename: isProduction ? '[name].[contenthash].js' : '[name].js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'docs'),
       clean: true,
       publicPath: '/'
     },
