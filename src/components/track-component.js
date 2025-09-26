@@ -257,6 +257,7 @@ export class TrackComponent extends Component {
                                     trackIndex={this.props.midiTrackIndex}
                                     toneTrack={toneTrack}
                                     toneMidi={toneMidi}
+                                    track={track}
                                 />
                                 {hasSelection && (
                                     <button
