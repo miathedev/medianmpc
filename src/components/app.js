@@ -8,6 +8,7 @@ import { FileWidget } from './file-widget.js';
 import { TrackComponent, MidiHeader } from './track-component.js';
 import { MidiDocument } from '../midi/midi-utils.js';
 import { MPCConverter } from '../converter/mpc-converter.js';
+import { Midi } from '@tonejs/midi';
 
 export class MidiConverterApp extends Component {
     constructor(props) {
@@ -17,7 +18,9 @@ export class MidiConverterApp extends Component {
             midiText: '',
             converter: null,
             isLoading: false,
-            error: null
+            error: null,
+            toneMidi: null,
+            midiArrayBuffer: null
         };
 
         this.fileWidgetRef = null;
@@ -48,6 +51,10 @@ export class MidiConverterApp extends Component {
             console.log(`Parsed MIDI document:`, midiDocument);
             console.log(`Tracks found: ${midiDocument.tracks.length}`);
 
+            // Parse with tone.js for playback (preserves tempo and channel data)
+            const toneMidi = new Midi(data);
+            console.log('Parsed Tone.js MIDI object:', toneMidi);
+
             // Log track details
             midiDocument.tracks.forEach((track, index) => {
                 console.log(`Track ${index + 1}: ${track.notes?.length || 0} notes, name: "${track.name || 'Unknown'}"`);
@@ -63,6 +70,7 @@ export class MidiConverterApp extends Component {
                 midiText: name,
                 converter,
                 midiArrayBuffer: data,
+                toneMidi,
                 isLoading: false,
                 error: null
             });
@@ -96,12 +104,14 @@ export class MidiConverterApp extends Component {
             midiDocument: null,
             midiText: '',
             converter: null,
-            error: null
+            error: null,
+            toneMidi: null,
+            midiArrayBuffer: null
         });
     };
 
     renderTrackList = () => {
-    const { midiDocument, converter, midiArrayBuffer } = this.state;
+    const { midiDocument, converter, midiArrayBuffer, toneMidi } = this.state;
 
     if (!midiDocument || !midiDocument.tracks) {
         return null;
@@ -117,9 +127,19 @@ export class MidiConverterApp extends Component {
         .map((track, midiTrackIndex) => ({ track, midiTrackIndex }))
         .filter(({ track }) => track.notes && track.notes.length > 0);
 
+    const toneTracksWithNotes = toneMidi
+        ? toneMidi.tracks.filter(track => track.notes && track.notes.length > 0)
+        : [];
+
     return (
         <div className="track-list">
-            {tracksWithNotes.map(({ track, midiTrackIndex }, uiIndex) => (
+            {tracksWithNotes.map(({ track, midiTrackIndex }, uiIndex) => {
+                const toneTrack = toneTracksWithNotes[uiIndex] || null;
+                if (!toneTrack) {
+                    console.warn(`No Tone.js track found for MIDI track index ${midiTrackIndex}.`);
+                }
+
+                return (
                 <TrackComponent
                     key={`track-${midiTrackIndex}`}
                     track={track}
@@ -128,8 +148,11 @@ export class MidiConverterApp extends Component {
                     song={midiDocument}
                     converter={converter}
                     midiArrayBuffer={midiArrayBuffer}
+                    toneTrack={toneTrack}
+                    toneMidi={toneMidi}
                 />
-            ))}
+                );
+            })}
         </div>
     );
 };

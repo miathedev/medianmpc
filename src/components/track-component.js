@@ -145,7 +145,7 @@ export class TrackComponent extends Component {
     };
 
     render() {
-        const { track, trackNum, song } = this.props;
+    const { track, trackNum, song, toneTrack, toneMidi } = this.props;
         const { selectedRange, isConverting } = this.state;
         
         console.log(`Rendering track ${trackNum}:`, track);
@@ -223,7 +223,12 @@ export class TrackComponent extends Component {
                                 >
                                     {isConverting ? 'Converting...' : '+ MPC Pattern'}
                                 </button>
-                                <MidiPlayer midiArrayBuffer={midiArrayBuffer} trackIndex={this.props.midiTrackIndex} />
+                                <MidiPlayer
+                                    midiArrayBuffer={midiArrayBuffer}
+                                    trackIndex={this.props.midiTrackIndex}
+                                    toneTrack={toneTrack}
+                                    toneMidi={toneMidi}
+                                />
                                 {hasSelection && (
                                     <button
                                         className="clear-selection-button"

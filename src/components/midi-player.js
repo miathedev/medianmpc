@@ -9,40 +9,94 @@ export class MidiPlayer extends React.Component {
     this.state = { isPlaying: false };
     this.synth = null;
     this.timeoutId = null;
+    this.midi = null;
+    this.loadedBuffer = null;
   }
 
   playTrack = async () => {
-    const { midiArrayBuffer, trackIndex } = this.props;
-    if (!midiArrayBuffer || trackIndex == null) return;
+    const { midiArrayBuffer, trackIndex, toneTrack, toneMidi } = this.props;
 
-    // Parse MIDI
-    const midi = new Midi(midiArrayBuffer);
-    const track = midi.tracks[trackIndex];
-    if (!track) return;
+    let track = toneTrack || null;
+
+    // If no tone track provided, fall back to parsing by index
+    if (!track) {
+      if (!midiArrayBuffer || trackIndex == null) {
+        console.warn('MidiPlayer: Missing toneTrack and midiArrayBuffer.');
+        return;
+      }
+
+      if (this.loadedBuffer !== midiArrayBuffer) {
+        try {
+          this.midi = new Midi(midiArrayBuffer);
+          this.loadedBuffer = midiArrayBuffer;
+        } catch (error) {
+          console.error('MidiPlayer: Failed to parse MIDI buffer', error);
+          return;
+        }
+      }
+
+      const sourceMidi = toneMidi || this.midi;
+      if (!sourceMidi) {
+        console.warn('MidiPlayer: No MIDI data available for playback.');
+        return;
+      }
+
+      track = sourceMidi.tracks?.[trackIndex] || null;
+
+      if (!track || !track.notes || track.notes.length === 0) {
+        // Attempt to align by filtering to tracks with notes when direct index lookup fails
+        const fallbackTracks = sourceMidi.tracks?.filter(t => t.notes && t.notes.length > 0) || [];
+        track = fallbackTracks[trackIndex] || fallbackTracks[0] || null;
+      }
+    }
+
+    if (!track || !track.notes || track.notes.length === 0) {
+      console.warn('MidiPlayer: Selected track has no playable notes.');
+      return;
+    }
+
+    // Ensure previous playback is stopped before starting a new one
+    this.stopTrack(true);
+
+    await Tone.start();
+    Tone.Transport.stop();
+    Tone.Transport.cancel();
+    Tone.Transport.position = 0;
 
     // Create a synth for playback
     this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
-    await Tone.start();
     this.setState({ isPlaying: true });
 
-    // Schedule notes
+    const now = Tone.now();
+
+    // Schedule notes for the selected track only
     track.notes.forEach(note => {
-      this.synth.triggerAttackRelease(note.name, note.duration, note.time, note.velocity);
+      const startTime = now + (note.time || 0);
+      const velocity = typeof note.velocity === 'number'
+        ? note.velocity
+        : (note.velocity ? parseFloat(note.velocity) : 0.7);
+      const duration = Math.max(note.duration || 0, 0.01);
+      this.synth.triggerAttackRelease(note.name, duration, startTime, velocity);
     });
 
-    // Start Tone Transport
-    Tone.Transport.cancel();
-    Tone.Transport.position = 0;
+    // Start Tone Transport immediately
     Tone.Transport.start();
+
+    // Determine track duration (fallback to max note end time when unavailable)
+    const trackDuration = typeof track.duration === 'number' && !Number.isNaN(track.duration)
+      ? track.duration
+      : track.notes.reduce((max, note) => Math.max(max, (note.time || 0) + (note.duration || 0)), 0);
 
     // Stop after track duration
     this.timeoutId = setTimeout(() => {
       this.stopTrack();
-    }, track.duration * 1000 + 500);
+    }, trackDuration * 1000 + 500);
   };
 
-  stopTrack = () => {
+  stopTrack = (keepState = false) => {
     Tone.Transport.stop();
+    Tone.Transport.cancel();
+    Tone.Transport.position = 0;
     if (this.synth) {
       this.synth.releaseAll();
       this.synth.dispose();
@@ -52,7 +106,9 @@ export class MidiPlayer extends React.Component {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
     }
-    this.setState({ isPlaying: false });
+    if (!keepState) {
+      this.setState({ isPlaying: false });
+    }
   };
 
   componentWillUnmount() {
