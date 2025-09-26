@@ -14,7 +14,7 @@ export default (env, argv) => {
       filename: isProduction ? '[name].[contenthash].js' : '[name].js',
       path: path.resolve(__dirname, 'docs'),
       clean: true,
-      publicPath: '/'
+      publicPath: '/medianmpc/'
     },
     mode: argv.mode || 'development',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
