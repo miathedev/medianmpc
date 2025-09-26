@@ -1,0 +1,462 @@
+/* File Widget Styles */
+.file-widget {
+    margin-bottom: 20px;
+}
+
+.drop-zone {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.drop-zone.drag-over {
+    border-color: #007bff;
+    background-color: #e3f2fd;
+    transform: scale(1.02);
+}
+
+.drop-zone-content {
+    color: #6c757d;
+}
+
+.drop-zone-content p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.file-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.file-button:hover {
+    background-color: #0056b3;
+}
+
+.file-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.file-info {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+}
+
+.file-details {
+    font-family: monospace;
+    font-size: 14px;
+    color: #495057;
+}
+
+/* MIDI Visualizer Styles */
+.midi-visualizer {
+    margin: 20px 0;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+/* Original MIDI Grid Styles (from median.css) */
+div.midigrid {
+    position: relative;
+    background-color: #E8E8E0;
+    overflow: hidden;
+    cursor: default;
+    border: 1px solid #ccc;
+    min-height: 60px;
+}
+
+div.midiitem {
+    position: absolute;
+    height: 4px;
+    background-color: black;
+    user-select: none;
+    border: none;
+}
+
+div.selbox {
+    background-color: gray;
+    position: absolute;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* Track Component Styles */
+.track-component {
+    margin: 20px 0;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.track-component.empty {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.track-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.track-header h3 {
+    margin: 0 0 10px 0;
+    color: #495057;
+}
+
+.track-name {
+    font-weight: normal;
+    color: #6c757d;
+}
+
+.track-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    font-size: 14px;
+    color: #6c757d;
+    background-color: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.track-content {
+    padding: 0;
+}
+
+.track-controls {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.selection-info {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.mpc-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mpc-button:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.mpc-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.clear-selection-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-selection-button:hover {
+    background-color: #5a6268;
+}
+
+.empty-track {
+    padding: 40px 20px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* MIDI Header Styles */
+.midi-header {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.midi-header h2 {
+    margin: 0 0 15px 0;
+    color: #495057;
+}
+
+.header-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.header-row:last-child {
+    border-bottom: none;
+}
+
+.label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.value {
+    color: #6c757d;
+    font-family: monospace;
+}
+
+/* Main App Styles */
+.midi-converter-app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.app-header h1 {
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+.app-description {
+    color: #6c757d;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.file-section {
+    margin-bottom: 30px;
+}
+
+.loading-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-section {
+    margin: 30px 0;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.error-message h3 {
+    margin: 0 0 10px 0;
+    color: #721c24;
+}
+
+.error-message button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.error-message button:hover {
+    background-color: #c82333;
+}
+
+.midi-content {
+    margin-top: 30px;
+}
+
+.content-header {
+    margin-bottom: 30px;
+}
+
+.midi-stats {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #e3f2fd;
+    border-radius: 6px;
+}
+
+.stats-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stat-item {
+    padding: 8px 12px;
+    background-color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.content-controls {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.clear-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-button:hover {
+    background-color: #5a6268;
+}
+
+.track-list {
+    margin: 30px 0;
+}
+
+.usage-notes {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+.usage-notes h3 {
+    margin: 0 0 15px 0;
+    color: #495057;
+}
+
+.usage-notes ul {
+    color: #6c757d;
+    line-height: 1.6;
+}
+
+.usage-notes li {
+    margin-bottom: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .midi-converter-app {
+        padding: 15px;
+    }
+    
+    .header-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .track-stats {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .stats-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .zoom-controls {
+        margin-bottom: 10px;
+    }
+    
+    .visualizer-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .drop-zone {
+        padding: 30px 15px;
+    }
+    
+    .drop-zone-content p {
+        font-size: 14px;
+    }
+    
+    .track-header {
+        padding: 12px 15px;
+    }
+    
+    .track-controls {
+        padding: 12px 15px;
+    }
+}

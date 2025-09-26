@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert MIDI files to MPC pattern format for Akai Force and other Akai products">
+    <title>MIDI to MPC Pattern Converter</title>
+    
+    <!-- Error handling -->
+    <script type="text/javascript">
+        window.onerror = function(msg, url, line, col, error) {
+            var extra = !col ? '' : '\ncolumn: ' + col;
+            extra += !error ? '' : '\nerror: ' + error;
+            console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
+            return true;
+        };
+    </script>
+    
+    <!-- Styles will be injected by webpack -->
+</head>
+<body>
+    <!-- Main application container -->
+    <div id="root"></div>
+    
+    <!-- Legacy containers for backward compatibility -->
+    <div id="midiview" style="display: none;"></div>
+    <div id="popupspot"></div>
+    <div id="docspot"></div>
+    <div id="midiantab"></div>
+    
+    <!-- Hidden file input for legacy support -->
+    <input id="opener" name="file" type="file" accept=".mid,.MID,.midi,.MIDI" style="display: none;" />
+    
+    <!-- Loading indicator -->
+    <div id="loading" style="display: none; text-align: center; padding: 50px;">
+        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <p>Loading application...</p>
+    </div>
+    
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        
+        #root {
+            min-height: 100vh;
+        }
+    </style>
+    
+    <!-- Scripts will be injected by webpack -->
+</body>
+</html>
