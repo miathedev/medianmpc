@@ -20,12 +20,20 @@ export default (env, argv) => {
     devtool: isProduction ? 'source-map' : 'eval-source-map',
     devServer: {
       static: {
-        directory: path.join(__dirname, 'dist'),
+        directory: path.join(__dirname, 'docs'),
+      },
+      devMiddleware: {
+        writeToDisk: true
       },
       compress: true,
       port: 8080,
       open: true,
       hot: true,
+      liveReload: true,
+      watchFiles: [
+        path.resolve(__dirname, 'src/**/*'),
+        path.resolve(__dirname, 'public/**/*')
+      ],
       historyApiFallback: true
     },
     module: {

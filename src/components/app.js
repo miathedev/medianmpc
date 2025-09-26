@@ -19,7 +19,7 @@ export class MidiConverterApp extends Component {
             isLoading: false,
             error: null
         };
-        
+
         this.fileWidgetRef = null;
     }
 
@@ -41,22 +41,22 @@ export class MidiConverterApp extends Component {
         console.log(`Loading file: ${name}`);
         console.log(`File size: ${data.byteLength} bytes`);
         console.log(`Data preview:`, new Uint8Array(data.slice(0, 16)));
-        
+
         try {
             // Parse MIDI file
             const midiDocument = MidiDocument.fromBuffer(data);
             console.log(`Parsed MIDI document:`, midiDocument);
             console.log(`Tracks found: ${midiDocument.tracks.length}`);
-            
+
             // Log track details
             midiDocument.tracks.forEach((track, index) => {
                 console.log(`Track ${index + 1}: ${track.notes?.length || 0} notes, name: "${track.name || 'Unknown'}"`);
             });
-            
+
             // Create converter
             const converter = new MPCConverter(midiDocument);
             console.log(`Created converter:`, converter);
-            
+
             // Update state
             this.setState({
                 midiDocument,
@@ -65,9 +65,9 @@ export class MidiConverterApp extends Component {
                 isLoading: false,
                 error: null
             });
-            
+
             console.log(`Successfully loaded MIDI file with ${midiDocument.tracks.length} tracks`);
-            
+
         } catch (error) {
             console.error('Error loading MIDI file:', error);
             console.error('Error stack:', error.stack);
@@ -101,7 +101,7 @@ export class MidiConverterApp extends Component {
 
     renderTrackList = () => {
         const { midiDocument, converter } = this.state;
-        
+
         if (!midiDocument || !midiDocument.tracks) {
             return null;
         }
@@ -128,7 +128,7 @@ export class MidiConverterApp extends Component {
 
     renderStats = () => {
         const { midiDocument } = this.state;
-        
+
         if (!midiDocument) return null;
 
         let totalNotes = 0;
@@ -162,7 +162,7 @@ export class MidiConverterApp extends Component {
                     <h1>MIDI to MPC Pattern Converter</h1>
                     <p className="app-description">
                         Convert MIDI files to MPC pattern format for Akai Force and other Akai products.
-                        Select a MIDI file, choose the tracks and time ranges you want to convert, 
+                        Select a MIDI file, choose the tracks and time ranges you want to convert,
                         and download the resulting MPC pattern files.
                     </p>
                 </div>
@@ -200,15 +200,15 @@ export class MidiConverterApp extends Component {
                 {midiDocument && !isLoading && (
                     <div className="midi-content">
                         <div className="content-header">
-                            <MidiHeader 
+                            <MidiHeader
                                 header={midiDocument.header}
                                 text={midiText}
                             />
-                            
+
                             {this.renderStats()}
-                            
+
                             <div className="content-controls">
-                                <button 
+                                <button
                                     className="clear-button"
                                     onClick={this.clearMidiData}
                                 >
@@ -218,19 +218,20 @@ export class MidiConverterApp extends Component {
                         </div>
 
                         {this.renderTrackList()}
-                        
-                        <div className="usage-notes">
-                            <h3>Usage Notes</h3>
-                            <ul>
-                                <li>You can select a subset of a track to extract by clicking and dragging on the timeline.</li>
-                                <li>At present, the program only converts Note On/Note Off events.</li>
-                                <li>The MIDI file you choose and the MPC pattern files are processed entirely on your computer. No data is sent elsewhere.</li>
-                                <li>MPC pattern files can be imported into Akai Force, MPC Live, MPC X, and other compatible devices.</li>
-                                <li>Each track is converted to a separate .mpcpattern file for easier organization.</li>
-                            </ul>
-                        </div>
+
+
                     </div>
                 )}
+                <div className="usage-notes">
+                    <h3>Usage Notes</h3>
+                    <ul>
+                        <li>You can select a subset of a track to extract by clicking and dragging on the timeline.</li>
+                        <li>At present, the program only converts Note On/Note Off events.</li>
+                        <li>The MIDI file you choose and the MPC pattern files are processed entirely on your computer. No data is sent elsewhere.</li>
+                        <li>MPC pattern files can be imported into Akai Force, MPC Live, MPC X, and other compatible devices.</li>
+                        <li>Each track is converted to a separate .mpcpattern file for easier organization.</li>
+                    </ul>
+                </div>
             </div>
         );
     }
@@ -246,7 +247,7 @@ export class WidgetManager {
         this.idString = '' + this.idNumber;
         this.homeId = this.idFor(containerId);
         this.container = document.getElementById(containerId);
-        
+
         if (!this.container) {
             throw new Error(`Container with id '${containerId}' not found`);
         }
@@ -278,7 +279,7 @@ export class WidgetManager {
         if (!this.midiDoc) {
             // Initialize MIDI document viewer if needed
         }
-        
+
         if (this.midiDoc && this.midiDoc.openOnBuffer) {
             this.midiDoc.openOnBuffer(data);
         }
@@ -293,7 +294,7 @@ export class WidgetManager {
 
     loadFile(file) {
         const reader = new FileReader();
-        
+
         reader.onload = (event) => {
             try {
                 const arrayBuffer = event.target.result;
@@ -316,17 +317,17 @@ export class WidgetManager {
         try {
             const midiDocument = MidiDocument.fromBuffer(data);
             const converter = new MPCConverter(midiDocument);
-            
+
             // Render React app
             const app = React.createElement(MidiConverterApp, {
                 initialMidiDocument: midiDocument,
                 initialMidiText: filename,
                 initialConverter: converter
             });
-            
+
             // You would need to use ReactDOM.render here in a real implementation
             console.log('MIDI data processed successfully');
-            
+
         } catch (error) {
             console.error('Error processing MIDI data:', error);
             alert(`Error processing MIDI file: ${error.message}`);
